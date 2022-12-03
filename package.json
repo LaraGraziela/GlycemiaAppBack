@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "sequelize-cli": "^6.5.2"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
   }
 }
