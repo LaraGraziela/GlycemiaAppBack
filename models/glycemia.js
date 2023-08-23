@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       hour: DataTypes.STRING,
       value: DataTypes.INTEGER,
       observation: DataTypes.STRING,
+      userId: DataTypes.INTEGER,
     },
     {
       sequelize,

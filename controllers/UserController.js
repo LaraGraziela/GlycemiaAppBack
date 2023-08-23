@@ -40,7 +40,7 @@ class UserController {
 
   static async create(req, res) {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, user_admin } = req.body;
 
       if (!name || !email || !password) {
         return res.status(400).json({ error: "Missing parameters" });
@@ -60,6 +60,7 @@ class UserController {
         name,
         email,
         password,
+        user_admin,
       });
 
       res.status(201).json({
@@ -79,7 +80,7 @@ class UserController {
         return res.status(400).json({ error: "Missing ID param" });
       }
 
-      const { name, email, password } = req.body;
+      const { name, email, password, user_admin } = req.body;
 
       if (email) {
         const emailExists = await database.User.findOne({
@@ -98,6 +99,7 @@ class UserController {
           name,
           email,
           password,
+          user_admin,
         },
         {
           where: {
@@ -160,8 +162,39 @@ class UserController {
         user: {
           id: user.id,
           name: user.name,
+          redirect: user.user_admin ? "admin" : "user",
         },
       });
+    } catch (error) {
+      return res.status(500).json(error.message);
+    }
+  }
+
+  static async findGlycemiaByUserId(req, res) {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(400).json({ error: "Missing ID param" });
+      }
+
+      const user = await database.User.findOne({
+        where: {
+          id: Number(id),
+        },
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const glycemias = await database.glycemia.findAll({
+        where: {
+          userId: Number(id),
+        },
+      });
+
+      res.status(200).json(glycemias);
     } catch (error) {
       return res.status(500).json(error.message);
     }

@@ -9,5 +9,6 @@ router.put("/user/:id", UserController.update);
 router.delete("/user/:id", UserController.delete);
 router.post("/user", UserController.create);
 router.post("/login", UserController.login);
+router.get("/glycemias/:id", UserController.findGlycemiaByUserId);
 
 module.exports = router;
